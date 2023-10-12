@@ -21,6 +21,35 @@ function handleClick(e) {
 }
 
 
+
+
+
+
+const answer = []
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+for (let i = 0; i < 16; i++) {
+    if (i % 4 == 0) {
+        answer[i] = getRandomInt(1, 6)
+        console.log(answer[i])
+    } else answer[i] = 0
+}
+
+for (let i = 0; i < answer.length; i++) {
+    if (answer[i] > 0) {
+        if (i < 10) document.querySelectorAll(".col0" + i)[answer[i] - 1].style.backgroundColor = 'yellow'
+        else document.querySelectorAll(".col" + i)[answer[i] - 1].style.backgroundColor = 'yellow' 
+    }       
+}
+
+
+
+
     // console.log(e.target.id)
     // const col = e.target.id.charAt(1) + e.target.id.charAt(2)
     // const row = e.target.id.charAt(4) + e.target.id.charAt(5)
