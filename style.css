@@ -2,3 +2,20 @@ body {
     background-color: black;
     color: yellow;
 }
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(16, 50px);
+}
+
+.column {
+    display: grid;
+    grid-template-rows: repeat(5, 50px);
+}
+
+.box {
+    height: 50px;
+    width: 50px;
+    background-color: black;
+    border: solid 2px magenta;
+}
