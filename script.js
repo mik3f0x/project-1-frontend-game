@@ -1,4 +1,6 @@
 const msgField = document.getElementById('message-field')
+const playBtn = document.getElementById('play-btn')
+
 
 // Array that holds both the random pattern and the user's current pattern
 const boolArray = new Array(80).fill(true)
@@ -25,8 +27,8 @@ function handleClick(e) {
     const colFirstBox = thisBox - (thisBox % 5)
     let checkedBox = -1
 
-    console.log(`thisBox = ${thisBox}`)
-    console.log(`colFirstBox = ${colFirstBox}`)
+    // console.log(`thisBox = ${thisBox}`)
+    // console.log(`colFirstBox = ${colFirstBox}`)
     // console.log(`checkedBox declared at ${checkedBox}`)
 
     // Check if any box in the clicked column is already checked; if so, get its box-number
@@ -77,10 +79,45 @@ function winTest(arr) {
     else return true
 }
 
+function playNote(level) {
+    const pitch = 220 * (1.189 ** level)
+    console.log(pitch)
+    const context = new AudioContext()
+    const o = context.createOscillator()
+    const g = context.createGain()
+    o.connect(g)
+    g.connect(context.destination)
+    o.type = 'square'
+    o.frequency.value = pitch
+    o.start()
+    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1.0)
+}
+
+function outerLoop() {
+    let i = 0;
+
+    function myLoop() {
+        setTimeout(function() {
+            for (let j = 0; j < 5; j++) {
+                box[j + i].style.borderColor = 'lime'
+                if (box[j + i].dataset.checked === "1") {
+                    playNote(5 - j)
+                }
+            }
+            i += 5
+            // if (i < 80) myLoop()
+            if (i > 79) i = 0
+            myLoop()
+        }, 125)
+    }
+
+    myLoop()
+}
+
+playBtn.onclick = () => { outerLoop() } 
 
 // function getRandomInt(min, max) {
     //     min = Math.ceil(min);
     //     max = Math.floor(max);
     //     return Math.floor(Math.random() * (max - min) + min);
     // }
-    
