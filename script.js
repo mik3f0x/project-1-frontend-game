@@ -1,87 +1,72 @@
-console.log('hey')
+// Array that holds both the random pattern and the user's current pattern
+const boolArray = new Array(80).fill(true)
 
-const arr = new Array(80).fill(true)
-
-for (let i = 0; i < arr.length; i += 20) {
+// Populate boolArray with random pattern at every 4th column
+for (let i = 0; i < boolArray.length; i += 20) {
     let ii = i + Math.floor(Math.random() * 5)
-    arr[ii] = false
+    boolArray[ii] = false
 }
 
-console.log(arr)
+// console.log(boolArray)
 
-
+// Get the grid
 const box = document.querySelectorAll(".box")
-
-// console.log(box)
 
 box.forEach((el) => { 
     el.addEventListener('click', handleClick)
-    el.innerHTML = arr[el.dataset.boxNumber]
+    el.innerHTML = boolArray[el.dataset.boxNumber]
     // console.log(el.dataset.boxNumber)
-})
+}) 
 
 function handleClick(e) {
-    document.querySelectorAll("." + e.target.classList[1]).forEach((el) => {el.style.backgroundColor = 'black'})
-    e.target.style.backgroundColor = 'blue'
-    index = e.target.dataset.boxNumber
-    arr[index] = !arr[index]
-    e.target.innerHTML = arr[index]
+    const thisBox = parseInt(e.target.dataset.boxNumber)
+    const colFirstBox = thisBox - (thisBox % 5)
+    let checkedBox = -1
+
+    console.log(`thisBox = ${thisBox}`)
+    console.log(`colFirstBox = ${colFirstBox}`)
+    // console.log(`checkedBox declared at ${checkedBox}`)
+
+    // Check if any box in the clicked column is already checked; if so, get its box-number
+    for (let i = colFirstBox; i < colFirstBox + 5; i++) {
+        i = i.toString()
+        const currentBox = document.querySelector(`[data-box-number="${i}"]`)
+        // console.log(`currentBox.dataset.checked = ${currentBox.dataset.checked}`)
+        if (currentBox.dataset.checked === '1') {
+            checkedBox = parseInt(currentBox.dataset.boxNumber)
+            // console.log(`checkedBox when this column already has a clicked box = ${checkedBox}`)
+            break
+        }
+    }
+
+    // console.log(`checkedBox after for loop ran = ${checkedBox}`)
+
+    if (checkedBox === -1) {
+        e.target.style.backgroundColor = 'blue'
+        e.target.dataset.checked = '1'
+        boolArray[thisBox] = !boolArray[thisBox]
+    } else if (checkedBox === thisBox) {
+        e.target.style.backgroundColor = 'black'
+        e.target.dataset.checked = '0'
+        boolArray[thisBox] = !boolArray[thisBox]
+    } else {
+        e.target.style.backgroundColor = 'blue'
+        e.target.dataset.checked = '1'
+        boolArray[thisBox] = !boolArray[thisBox]
+        const currentBox = document.querySelector(`[data-box-number="${checkedBox}"]`)
+        currentBox.style.backgroundColor = 'black'
+        currentBox.dataset.checked = '0'
+        boolArray[checkedBox] = !boolArray[checkedBox]
+    }
+
+    box.forEach((el) => { 
+        el.innerHTML = boolArray[el.dataset.boxNumber]
+    })    
+}
+
+// function getRandomInt(min, max) {
+    //     min = Math.ceil(min);
+    //     max = Math.floor(max);
+    //     return Math.floor(Math.random() * (max - min) + min);
+    // }
     
-    const tmp = new Set(arr);
-    console.log(tmp.size)
-    if (tmp.size === 1) console.log('YOU WON')
-}
-
-
-
-
-
-
-// const answer = []
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-// for (let i = 0; i < 16; i++) {
-//     if (i % 4 == 0) {
-//         answer[i] = getRandomInt(1, 6)
-//         console.log(answer[i])
-//     } else answer[i] = 0
-// }
-
-
-
-// for (let i = 0; i < answer.length; i++) {
-//     if (answer[i] > 0) {
-//         if (i < 10) document.querySelectorAll(".col0" + i)[answer[i] - 1].style.BorderColor = '#0FFF50'
-//         else document.querySelectorAll(".col" + i)[answer[i] - 1].style.BorderColor = '#0FFF50' 
-//     }       
-// }
-
-
-
-
-    // console.log(e.target.id)
-    // const col = e.target.id.charAt(1) + e.target.id.charAt(2)
-    // const row = e.target.id.charAt(4) + e.target.id.charAt(5)
-    // arr[col].forEach((el, i) => {
-    //     let boxId = 'c' + col + 'r0' + i;
-    //     console.log(boxId)
-    //     // box[boxId].style.backgroundColor = 'red'
-    //     // box.style.backgroundColor = 'black'
-    // })
-
-
-
-    // console.log(thisCol[3].id)
-
-    // thisCol.forEach((el) => { console.log(el.id)})
-
-     //.forEach((el) => { el.style.backgroundColor = 'red' })
-
-
-
-
