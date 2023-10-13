@@ -1,3 +1,5 @@
+const msgField = document.getElementById('message-field')
+
 // Array that holds both the random pattern and the user's current pattern
 const boolArray = new Array(80).fill(true)
 
@@ -64,7 +66,7 @@ function handleClick(e) {
     }) 
     
     if (winTest(boolArray)) {
-        console.log('YOU WON')
+        msgField.innerText = "YOU WON"
         box.forEach((el) => { el.removeEventListener('click', handleClick) })         
     }
 }
