@@ -16,7 +16,7 @@ box.forEach((el) => {
     el.addEventListener('click', handleClick)
     el.innerHTML = boolArray[el.dataset.boxNumber]
     // console.log(el.dataset.boxNumber)
-}) 
+})
 
 function handleClick(e) {
     const thisBox = parseInt(e.target.dataset.boxNumber)
@@ -61,8 +61,20 @@ function handleClick(e) {
 
     box.forEach((el) => { 
         el.innerHTML = boolArray[el.dataset.boxNumber]
-    })    
+    }) 
+    
+    if (winTest(boolArray)) {
+        console.log('YOU WON')
+        box.forEach((el) => { el.removeEventListener('click', handleClick) })         
+    }
 }
+
+function winTest(arr) {
+    const numUniqueVals = new Set(arr);
+    if (numUniqueVals.size > 1) return false
+    else return true
+}
+
 
 // function getRandomInt(min, max) {
     //     min = Math.ceil(min);
