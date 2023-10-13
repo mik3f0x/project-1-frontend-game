@@ -1,10 +1,14 @@
 console.log('hey')
 
-const arr = []
+const arr = new Array(80).fill(true)
 
-for (let i = 0; i < 16; i++) {
-    arr[i] = [false, false, false, false, false]
+for (let i = 0; i < arr.length; i += 20) {
+    let ii = i + Math.floor(Math.random() * 5)
+    arr[ii] = false
 }
+
+console.log(arr)
+
 
 const box = document.querySelectorAll(".box")
 
@@ -12,12 +16,20 @@ const box = document.querySelectorAll(".box")
 
 box.forEach((el) => { 
     el.addEventListener('click', handleClick)
-    el.innerHTML = el.id
+    el.innerHTML = arr[el.dataset.boxNumber]
+    // console.log(el.dataset.boxNumber)
 })
 
 function handleClick(e) {
     document.querySelectorAll("." + e.target.classList[1]).forEach((el) => {el.style.backgroundColor = 'black'})
-    e.target.style.backgroundColor = 'cyan'
+    e.target.style.backgroundColor = 'blue'
+    index = e.target.dataset.boxNumber
+    arr[index] = !arr[index]
+    e.target.innerHTML = arr[index]
+    
+    const tmp = new Set(arr);
+    console.log(tmp.size)
+    if (tmp.size === 1) console.log('YOU WON')
 }
 
 
@@ -25,7 +37,7 @@ function handleClick(e) {
 
 
 
-const answer = []
+// const answer = []
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -33,19 +45,21 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-for (let i = 0; i < 16; i++) {
-    if (i % 4 == 0) {
-        answer[i] = getRandomInt(1, 6)
-        console.log(answer[i])
-    } else answer[i] = 0
-}
+// for (let i = 0; i < 16; i++) {
+//     if (i % 4 == 0) {
+//         answer[i] = getRandomInt(1, 6)
+//         console.log(answer[i])
+//     } else answer[i] = 0
+// }
 
-for (let i = 0; i < answer.length; i++) {
-    if (answer[i] > 0) {
-        if (i < 10) document.querySelectorAll(".col0" + i)[answer[i] - 1].style.backgroundColor = 'yellow'
-        else document.querySelectorAll(".col" + i)[answer[i] - 1].style.backgroundColor = 'yellow' 
-    }       
-}
+
+
+// for (let i = 0; i < answer.length; i++) {
+//     if (answer[i] > 0) {
+//         if (i < 10) document.querySelectorAll(".col0" + i)[answer[i] - 1].style.BorderColor = '#0FFF50'
+//         else document.querySelectorAll(".col" + i)[answer[i] - 1].style.BorderColor = '#0FFF50' 
+//     }       
+// }
 
 
 
