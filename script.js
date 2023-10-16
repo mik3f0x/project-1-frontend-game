@@ -77,7 +77,7 @@ function winTest(arr) {
     else return true
 }
 
-let context
+const context = new AudioContext()
 
 function playNote(level) {
     const pitch = 220 * (1.189 ** level)
@@ -93,29 +93,22 @@ function playNote(level) {
     setTimeout(function() {o.stop()}, 250)
 }
 
-function outerLoop() {
-    context = new AudioContext()
-
-    let i = 0;
-
-    function innerLoop() {
-        setTimeout(function() {
-            for (let j = 0; j < 5; j++) {
-                box[j + i].style.borderColor = 'lime'
-                setTimeout(function() {
-                    box[j + i].style.borderColor = 'magenta'
-                }, 62.5)                
-                if (box[j + i].dataset.checked === "1") {
-                    playNote(5 - j)
-                }
+let index = 0;
+function playLoop() {
+    setTimeout(function() {
+        for (let j = 0; j < 5; j++) {
+            box[j + index].style.borderColor = 'lime'
+            setTimeout(function() {
+                box[j + index].style.borderColor = 'magenta'
+            }, 62.5)                
+            if (box[j + index].dataset.checked === "1") {
+                playNote(5 - j)
             }
-            i += 5
-            if (i > 79) i = 0
-            innerLoop()
-        }, 125)
-    }
-
-    innerLoop()
+        }
+        index += 5
+        if (index > 79) index = 0
+        playLoop()
+    }, 125)
 }
 
-playBtn.onclick = () => { outerLoop() }
+playBtn.onclick = () => { playLoop() }
