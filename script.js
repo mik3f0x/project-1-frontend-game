@@ -1,5 +1,6 @@
 const msgField = document.getElementById('message-field')
 const playBtn = document.getElementById('play-btn')
+const pauseBtn = document.getElementById('pause-btn')
 
 // Array that holds both the random tune and the user's current selected tune
 const boolArray = new Array(80).fill(true)
@@ -90,11 +91,17 @@ function playNote(level) {
     o.frequency.value = pitch
     o.start()
     g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1.0)
-    setTimeout(function() {o.stop()}, 250)
+    // setTimeout(function() {o.stop()}, 250)
 }
 
 let index = 0;
 function playLoop() {
+    let pause = false
+    pauseBtn.onclick = () => {
+        pause = !pause
+        if (pause === false) playLoop()
+    }
+
     setTimeout(function() {
         for (let j = 0; j < 5; j++) {
             box[j + index].style.borderColor = 'lime'
@@ -107,7 +114,7 @@ function playLoop() {
         }
         index += 5
         if (index > 79) index = 0
-        playLoop()
+        if (pause === false) playLoop()
     }, 125)
 }
 
