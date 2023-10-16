@@ -1,17 +1,15 @@
 const msgField = document.getElementById('message-field')
 const playBtn = document.getElementById('play-btn')
 
-
-// Array that holds both the random pattern and the user's current pattern
+// Array that holds both the random tune and the user's current selected tune
 const boolArray = new Array(80).fill(true)
 
-// Populate boolArray with random pattern at every 4th column
+// Populate boolArray with random tune at every 4th column
 for (let i = 0; i < boolArray.length; i += 20) {
     let ii = i + Math.floor(Math.random() * 5)
     boolArray[ii] = false
+    // console.log(boolArray)
 }
-
-// console.log(boolArray)
 
 // Get the grid
 const box = document.querySelectorAll(".box")
@@ -79,10 +77,11 @@ function winTest(arr) {
     else return true
 }
 
+let context
+
 function playNote(level) {
     const pitch = 220 * (1.189 ** level)
     console.log(pitch)
-    const context = new AudioContext()
     const o = context.createOscillator()
     const g = context.createGain()
     o.connect(g)
@@ -91,33 +90,32 @@ function playNote(level) {
     o.frequency.value = pitch
     o.start()
     g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1.0)
+    setTimeout(function() {o.stop()}, 250)
 }
 
 function outerLoop() {
+    context = new AudioContext()
+
     let i = 0;
 
-    function myLoop() {
+    function innerLoop() {
         setTimeout(function() {
             for (let j = 0; j < 5; j++) {
                 box[j + i].style.borderColor = 'lime'
+                setTimeout(function() {
+                    box[j + i].style.borderColor = 'magenta'
+                }, 62.5)                
                 if (box[j + i].dataset.checked === "1") {
                     playNote(5 - j)
                 }
             }
             i += 5
-            // if (i < 80) myLoop()
             if (i > 79) i = 0
-            myLoop()
+            innerLoop()
         }, 125)
     }
 
-    myLoop()
+    innerLoop()
 }
 
-playBtn.onclick = () => { outerLoop() } 
-
-// function getRandomInt(min, max) {
-    //     min = Math.ceil(min);
-    //     max = Math.floor(max);
-    //     return Math.floor(Math.random() * (max - min) + min);
-    // }
+playBtn.onclick = () => { outerLoop() }
