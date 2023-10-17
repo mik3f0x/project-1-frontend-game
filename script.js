@@ -10,18 +10,45 @@ const stopBtn = document.getElementById('stop-btn')
 const boolArray = new Array(80).fill(true)
 
 // Populate boolArray with random tune at every 4th column
-for (let i = 0; i < boolArray.length; i += 10) {
-    let ii = i + Math.floor(Math.random() * 5)
-    boolArray[ii] = false
+function randomTune(difficulty) {
+    let density
+    if (difficulty === 0) density = 20
+    else if (difficulty === 1 || difficulty === 2) density = 10
+    else if (difficulty === 3) density = 5
+
+    for (let i = 0; i < boolArray.length; i += density) {
+        let ii = i + Math.floor(Math.random() * 5)
+        boolArray[ii] = false
+
+        if (difficulty === 2) {
+            if (Math.floor(Math.random() * 8) === 0) {
+                let iii = i + 5 + Math.floor(Math.random() * 5)
+                boolArray[iii] = false
+            }
+        }
+    }
 }
 
+randomTune(2)
+
 // Musical fine parameters
-let basePitch = 80
-const quarterOctave = 1.1892
-const thirdOctave = 1.26
-let multiplier = thirdOctave
-const waveforms = ['sine', 'triangle', 'square', 'sawtooth']
-let waveform = 0
+const basePitchChoices = [55]
+for (let i = 0; i < 60; i++) { basePitchChoices.push(basePitchChoices[i] * (2 ** (1/12))) }
+let basePitch = basePitchChoices[Math.floor(Math.random() * basePitchChoices.length)]
+
+const stepChoices = [1/12, 1/6, 1/4, 1/3, 5/12]
+let step = stepChoices[Math.floor(Math.random() * stepChoices.length)]
+
+let multiplier = 2 ** step
+const waveformChoices = ['sine', 'triangle', 'square', 'sawtooth']
+let waveform = waveformChoices[Math.floor(Math.random() * waveformChoices.length)]
+
+let volume = 1
+if (basePitch < 220 && waveform === 'sine') volume = 3
+
+console.log(basePitch)
+console.log(step)
+console.log(waveform)
 
 // Preserve the random tune as boolArray is changed by the user
 const answerArray = [...boolArray]
@@ -85,8 +112,9 @@ function playNote(level) {
     const g = context.createGain()
     o.connect(g)
     g.connect(context.destination)
-    o.type = waveforms[waveform]
+    o.type = waveform
     o.frequency.value = pitch
+    g.gain.value = volume
     o.start()
     g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1.0)
 }
