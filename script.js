@@ -1,5 +1,6 @@
-let gameState = 'stopped'
-levelCount = 1
+let gameActive = true
+levelCount = 0
+
 const levelNum = document.getElementById('level-num')
 const levelSkill = document.getElementById('level-skill')
 const msgField = document.getElementById('message-field')
@@ -26,15 +27,12 @@ let volume = 1
 const boolArray = new Array(80).fill(true)
 let answerArray = [...boolArray]
 
-// Populate boolArray with random tune
 function randomTune(difficulty) {
     boolArray.fill(true)
-    console.log(boolArray)
 
-    let density
+    let density = 5
     if (difficulty === 0) density = 20
-    else if (difficulty === 1 || difficulty === 2) density = 10
-    else if (difficulty === 3) density = 5
+    else if (difficulty < 3) density = 10
 
     for (let i = 0; i < boolArray.length; i += density) {
         let ii = i + Math.floor(Math.random() * 5)
@@ -57,9 +55,6 @@ function randomTune(difficulty) {
     console.log(step)
     console.log(waveform)
 }
-
-randomTune(0)
-
 
 // Get the board
 const box = document.querySelectorAll(".box")
@@ -104,9 +99,6 @@ function resetBoard() {
             boolArray[checkedBox] = !boolArray[checkedBox]
         }
 
-        console.log(boolArray)
-
-
         if (winTest(boolArray)) {
             msgField.innerText = "YOU WON"
             box.forEach((el) => { el.removeEventListener('click', handleClick) }) 
@@ -114,8 +106,6 @@ function resetBoard() {
         }
     }
 }
-
-resetBoard()
 
 function winTest(arr) { return new Set(arr).size > 1 ? false : true }
 
@@ -138,7 +128,7 @@ function playNote(level) {
 let index = 0;
 function playLoop() { 
     playBtn.removeEventListener("click", playLoop)
-    if (gameState === 'stopped') {
+    if (gameActive) {
         let pause = false
         let stop = false
         pauseBtn.onclick = () => {
@@ -167,22 +157,22 @@ function playLoop() {
 startBtn.onclick = () => { listen() }
 
 function listen() {
-    gameState = 'switch'
+    gameActive = false
     for (i = 0; i < 80; i += 5) {
         for (let j = 0; j < 5; j++) {
             if (answerArray[i + j] === false) setTimeout(function() { playNote(5 - j) }, i * 25)
         }
     }
     setTimeout(function() {
-        gameState = 'stopped'
+        gameActive = true
         playBtn.addEventListener("click", playLoop)
     }, 2000)
 }
 
 stopBtn.onclick = () => { 
-    gameState = 'switch'
+    gameActive = false
     setTimeout(function() {
-        gameState = 'stopped'
+        gameActive = true
         playBtn.addEventListener("click", playLoop)
     }, 500)
 }
@@ -201,7 +191,6 @@ function newLevel() {
    
     levelCount += 1
     levelNum.innerText = levelCount.toString()
-    console.log(`levelCount stuff = ${Math.floor(levelCount/3)}`)
     nextBtn.style.display = 'none'
     msgField.innerText = ''
 
@@ -212,3 +201,5 @@ function newLevel() {
     randomTune(skillLevel)
     resetBoard()
 }
+
+newLevel()
