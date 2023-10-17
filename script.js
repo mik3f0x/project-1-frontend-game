@@ -1,5 +1,7 @@
 let gameState = 'stopped'
-
+levelCount = 1
+const levelNum = document.getElementById('level-num')
+const levelSkill = document.getElementById('level-skill')
 const msgField = document.getElementById('message-field')
 const startBtn = document.getElementById('start-btn')
 const playBtn = document.getElementById('play-btn')
@@ -192,9 +194,16 @@ function newLevel() {
         el.dataset.checked = '0'
     })
    
-    randomTune(0)
-    resetBoard()
-
+    levelCount += 1
+    levelNum.innerText = levelCount.toString()
+    console.log(`levelCount stuff = ${Math.floor(levelCount/3)}`)
     nextBtn.style.display = 'none'
     msgField.innerText = ''
+
+    const skillLevel = Math.ceil(levelCount/3) - 1
+    const skillList = ['EASY', 'MEDIUM', 'HARD', 'INSANE']
+    levelSkill.innerText = skillList[skillLevel]
+
+    randomTune(skillLevel)
+    resetBoard()
 }
