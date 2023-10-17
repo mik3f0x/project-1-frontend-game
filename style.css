@@ -19,3 +19,7 @@ body {
     background-color: black;
     border: solid 2px magenta;
 }
+
+#next-btn {
+    display: none;
+}

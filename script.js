@@ -59,7 +59,7 @@ function randomTune(difficulty) {
 randomTune(0)
 
 
-// Get the grid
+// Get the board
 const box = document.querySelectorAll(".box")
 
 function resetBoard() {
@@ -103,18 +103,15 @@ function resetBoard() {
 
         if (winTest(boolArray)) {
             msgField.innerText = "YOU WON"
-            box.forEach((el) => { el.removeEventListener('click', handleClick) })         
+            box.forEach((el) => { el.removeEventListener('click', handleClick) }) 
+            nextBtn.style.display = 'inline'        
         }
     }
 }
 
 resetBoard()
 
-function winTest(arr) {
-    const numUniqueVals = new Set(arr);
-    if (numUniqueVals.size > 1) return false
-    else return true
-}
+function winTest(arr) { return new Set(arr).size > 1 ? false : true }
 
 const context = new AudioContext()
 
@@ -198,5 +195,6 @@ function newLevel() {
     randomTune(0)
     resetBoard()
 
+    nextBtn.style.display = 'none'
     msgField.innerText = ''
 }
