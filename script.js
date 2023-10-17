@@ -83,19 +83,23 @@ function resetBoard() {
         }
 
         if (checkedBox === -1) {
-            e.target.style.backgroundColor = 'blue'
+            e.target.style.backgroundColor = 'red'
+            e.target.style.boxShadow = '6px 4px 2px 1px red'
             e.target.dataset.checked = '1'
             boolArray[thisBox] = !boolArray[thisBox]
         } else if (checkedBox === thisBox) {
             e.target.style.backgroundColor = 'black'
+            e.target.style.boxShadow = 'none'
             e.target.dataset.checked = '0'
             boolArray[thisBox] = !boolArray[thisBox]
         } else {
-            e.target.style.backgroundColor = 'blue'
+            e.target.style.backgroundColor = 'red'
+            e.target.style.boxShadow = '6px 4px 2px 1px red'
             e.target.dataset.checked = '1'
             boolArray[thisBox] = !boolArray[thisBox]
             const currentBox = document.querySelector(`[data-box-number="${checkedBox}"]`)
             currentBox.style.backgroundColor = 'black'
+            currentBox.style.boxShadow = 'none'
             currentBox.dataset.checked = '0'
             boolArray[checkedBox] = !boolArray[checkedBox]
         }
@@ -191,6 +195,7 @@ function newLevel() {
     box.forEach((el) => {
         el.style.borderColor = 'magenta'
         el.style.backgroundColor = 'black' 
+        el.style.boxShadow = 'none'
         el.dataset.checked = '0'
     })
    
