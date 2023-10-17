@@ -1,3 +1,5 @@
+let gameState = 'stopped'
+
 const msgField = document.getElementById('message-field')
 const startBtn = document.getElementById('start-btn')
 const playBtn = document.getElementById('play-btn')
@@ -8,43 +10,41 @@ const stopBtn = document.getElementById('stop-btn')
 const boolArray = new Array(80).fill(true)
 
 // Populate boolArray with random tune at every 4th column
-for (let i = 0; i < boolArray.length; i += 20) {
+for (let i = 0; i < boolArray.length; i += 10) {
     let ii = i + Math.floor(Math.random() * 5)
     boolArray[ii] = false
-    // console.log(boolArray)
 }
+
+// Musical fine parameters
+let basePitch = 80
+const quarterOctave = 1.1892
+const thirdOctave = 1.26
+let multiplier = thirdOctave
+const waveforms = ['sine', 'triangle', 'square', 'sawtooth']
+let waveform = 0
+
+// Preserve the random tune as boolArray is changed by the user
+const answerArray = [...boolArray]
 
 // Get the grid
 const box = document.querySelectorAll(".box")
 
-box.forEach((el) => { 
-    el.addEventListener('click', handleClick)
-    // el.innerHTML = boolArray[el.dataset.boxNumber]
-    // console.log(el.dataset.boxNumber)
-})
+box.forEach((el) => { el.addEventListener('click', handleClick) })
 
 function handleClick(e) {
     const thisBox = parseInt(e.target.dataset.boxNumber)
     const colFirstBox = thisBox - (thisBox % 5)
     let checkedBox = -1
 
-    // console.log(`thisBox = ${thisBox}`)
-    // console.log(`colFirstBox = ${colFirstBox}`)
-    // console.log(`checkedBox declared at ${checkedBox}`)
-
     // Check if any box in the clicked column is already checked; if so, get its box-number
     for (let i = colFirstBox; i < colFirstBox + 5; i++) {
         i = i.toString()
         const currentBox = document.querySelector(`[data-box-number="${i}"]`)
-        // console.log(`currentBox.dataset.checked = ${currentBox.dataset.checked}`)
         if (currentBox.dataset.checked === '1') {
             checkedBox = parseInt(currentBox.dataset.boxNumber)
-            // console.log(`checkedBox when this column already has a clicked box = ${checkedBox}`)
             break
         }
     }
-
-    // console.log(`checkedBox after for loop ran = ${checkedBox}`)
 
     if (checkedBox === -1) {
         e.target.style.backgroundColor = 'blue'
@@ -64,10 +64,6 @@ function handleClick(e) {
         boolArray[checkedBox] = !boolArray[checkedBox]
     }
 
-    // box.forEach((el) => { 
-    //     el.innerHTML = boolArray[el.dataset.boxNumber]
-    // }) 
-    
     if (winTest(boolArray)) {
         msgField.innerText = "YOU WON"
         box.forEach((el) => { el.removeEventListener('click', handleClick) })         
@@ -83,63 +79,111 @@ function winTest(arr) {
 const context = new AudioContext()
 
 function playNote(level) {
-    const pitch = 220 * (1.189 ** level)
+    const pitch = basePitch * (multiplier ** (level - 1))
     console.log(pitch)
     const o = context.createOscillator()
     const g = context.createGain()
     o.connect(g)
     g.connect(context.destination)
-    o.type = 'square'
+    o.type = waveforms[waveform]
     o.frequency.value = pitch
     o.start()
     g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1.0)
-    // setTimeout(function() {o.stop()}, 250)
 }
 
 let index = 0;
-function playLoop() {
-    let pause = false
-    let stop = false
-    pauseBtn.onclick = () => {
-        pause = !pause
-        if (pause === false) playLoop()
-    }
-
-    setTimeout(function() {
-        for (let j = 0; j < 5; j++) {
-            box[j + index].style.borderColor = 'lime'
-            setTimeout(function() {
-                box[j + index].style.borderColor = 'magenta'
-            }, 25)                
-            if (box[j + index].dataset.checked === "1") {
-                playNote(5 - j)
-            }
+function playLoop() { 
+    playBtn.removeEventListener("click", playLoop)
+    if (gameState === 'stopped') {
+        let pause = false
+        let stop = false
+        pauseBtn.onclick = () => {
+            pause = !pause
+            if (pause === false) playLoop()
         }
-        index += 5
-        if (index > 79) index = 0
-        if (pause === false) playLoop()
-    }, 125)
 
-    stopBtn.onclick = () => { console.log('stop button dont work yet!') }
+        setTimeout(function() {
+            for (let j = 0; j < 5; j++) {
+                box[j + index].style.borderColor = 'magenta'
+                setTimeout(function() {
+                    box[j + index].style.borderColor = 'lime'
+                }, 25)                
+                if (box[j + index].dataset.checked === "1") {
+                    playNote(5 - j)
+                }
+            }
+            index += 5
+            if (index > 79) index = 0
+            if (pause === false) playLoop()
+        }, 125)
+    } else index = 0
 }
-
-playBtn.onclick = () => { playLoop() }
-
 
 
 startBtn.onclick = () => { listen() }
 
-const answerArray = [...boolArray]
-
 function listen() {
+    gameState = 'switch'
     for (i = 0; i < 80; i += 5) {
-        // setTimeout(function() {
-            for (let j = 0; j < 5; j++) {
-                if (answerArray[i + j] === false) {
-                    console.log(i * 25)
-                    setTimeout(function() { playNote(5 - j) }, i * 25)
-                }
-            }
-        // }, i + 125)
+        for (let j = 0; j < 5; j++) {
+            if (answerArray[i + j] === false) setTimeout(function() { playNote(5 - j) }, i * 25)
+        }
     }
+    setTimeout(function() {
+        gameState = 'stopped'
+        playBtn.addEventListener("click", playLoop)
+    }, 2000)
 }
+
+stopBtn.onclick = () => { 
+    gameState = 'switch'
+    setTimeout(function() {
+        gameState = 'stopped'
+        playBtn.addEventListener("click", playLoop)
+    }, 500)
+}
+
+playBtn.addEventListener("click", playLoop)
+
+/*
+
+if stopped
+    start - plays answer
+    play - plays board
+    pause - nothing
+    stop - nothing
+
+if answer-playing
+    start - stops answer & plays answer
+    play - nothing
+    pause - nothing
+    stop - stops answer
+
+if board playing
+    start - stops board & plays answer
+    play - stops board & plays board
+    pause - pauses board
+    stop - stops board
+
+if board paused
+    start - stops board & plays answer
+    play - stops board & plays board
+    pause - unpauses board
+    stop - stops board
+
+*/
+
+// const gameState = {
+//     stopped: true;
+//     answer: false;
+//     playing: false;
+//     paused: false;
+// }
+
+
+// let playing =  false
+
+// function playPause() {
+//     if playing === playLoop()
+
+// }
