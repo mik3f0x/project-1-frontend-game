@@ -8,7 +8,11 @@
     <script defer src="script.js"></script>
 </head>
 <body>
-    <h1>Tune Sleuth</h1>
+    <header>
+        <h1>Tune Sleuth</h1>
+        <h1>LEVEL <span id="level-num">1</span></h1>
+        <h1 id="level-skill">EASY</h1>
+    </header>
     <div id="board">
         <div class="column" id="c00">
             <div class="box col00 row00" id="c00r00" data-box-number="0" data-checked="0"></div>
@@ -122,13 +126,14 @@
             <div class="box col15 row03" id="c15r03" data-box-number="78" data-checked="0"></div>
             <div class="box col15 row04" id="c15r04" data-box-number="79" data-checked="0"></div>
         </div>
-   </div>
-   <button id="start-btn">Listen</button>
-   <button id="play-btn">Play</button>
-   <button id="pause-btn">Pause</button>
-   <button id="stop-btn">Stop</button>
-   <button id="next-btn">NEXT</button>
-   <h2>LEVEL <span id="level-num">1</span>: <span id="level-skill">EASY</span></h2>
-   <h2 id="message-field"></h2>
+    </div>
+    <div id="player-controls">
+        <button id="listen-btn"></button>
+        <button id="play-btn"></button>
+        <button id="pause-btn"></button>
+        <button id="stop-btn"></button>
+    </div>
+    <button id="next-btn">NEXT</button>
+    <h2 id="message-field"></h2>
 </body>
 </html>

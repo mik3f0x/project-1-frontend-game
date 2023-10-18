@@ -4,7 +4,7 @@ levelCount = 0
 const levelNum = document.getElementById('level-num')
 const levelSkill = document.getElementById('level-skill')
 const msgField = document.getElementById('message-field')
-const startBtn = document.getElementById('start-btn')
+const listenBtn = document.getElementById('listen-btn')
 const playBtn = document.getElementById('play-btn')
 const pauseBtn = document.getElementById('pause-btn')
 const stopBtn = document.getElementById('stop-btn')
@@ -156,7 +156,7 @@ function playLoop() {
 }
 
 // Play the secret answer
-startBtn.onclick = () => { listen() }
+listenBtn.onclick = () => { listen() }
 function listen() {
     gameActive = false
     for (i = 0; i < 80; i += 5) {
