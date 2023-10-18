@@ -67,6 +67,22 @@ header {
     background: url(images/stop.png);
 }
 
+#next-container {
+    margin-top: 50px;
+}
+
 #next-btn {
-    display: none;
+    display: block;
+    margin: auto;
+    height: 100px;
+    width: 160px;
+    background: url(images/next.png);
+    border: none;
+    background-size: cover;
+    border-radius: 5%;
+    background-color: #0cf;
+    box-shadow:
+        0 0 10px 6px #0cf,
+        0 0 14px 9px #000;
+
 }

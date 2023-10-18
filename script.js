@@ -105,7 +105,7 @@ function resetBoard() {
         if (winTest(boolArray)) {
             msgField.innerText = "YOU WON"
             box.forEach((el) => { el.removeEventListener('click', handleClick) }) 
-            nextBtn.style.display = 'inline'        
+            nextBtn.style.display = 'block'        
         }
     }
 }
