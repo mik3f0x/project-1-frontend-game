@@ -37,7 +37,7 @@ function randomTune(difficulty) {
 
     for (let i = 0; i < boolArray.length; i += density) {
         let ii = i + Math.floor(Math.random() * 5)
-        boolArray[ii] = false
+        if (difficulty < 3 || Math.random() < 0.875) boolArray[ii] = false
 
         if (difficulty === 2 && Math.floor(Math.random() * 8) === 0) {
                 let iii = i + 5 + Math.floor(Math.random() * 5)
