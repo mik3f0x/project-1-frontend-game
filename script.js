@@ -27,6 +27,7 @@ let volume = 1
 const boolArray = new Array(80).fill(true)
 let answerArray = [...boolArray]
 
+// Generate the random secret answer
 function randomTune(difficulty) {
     boolArray.fill(true)
 
@@ -60,6 +61,8 @@ function randomTune(difficulty) {
 const box = document.querySelectorAll(".box")
 
 function resetBoard() {
+    listen()
+    
     box.forEach((el) => { el.addEventListener('click', handleClick) })
 
     function handleClick(e) {
@@ -130,7 +133,6 @@ function playLoop() {
     playBtn.removeEventListener("click", playLoop)
     if (gameActive) {
         let pause = false
-        let stop = false
         pauseBtn.onclick = () => {
             pause = !pause
             if (pause === false) playLoop()
@@ -153,9 +155,8 @@ function playLoop() {
     } else index = 0
 }
 
-
+// Play the secret answer
 startBtn.onclick = () => { listen() }
-
 function listen() {
     gameActive = false
     for (i = 0; i < 80; i += 5) {
@@ -163,6 +164,8 @@ function listen() {
             if (answerArray[i + j] === false) setTimeout(function() { playNote(5 - j) }, i * 25)
         }
     }
+
+    // Disable gameplay until secret answer tune is finished
     setTimeout(function() {
         gameActive = true
         playBtn.addEventListener("click", playLoop)
