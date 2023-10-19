@@ -1,9 +1,11 @@
 let gameActive = true
-levelCount = 0
+levelCount = 11
 
+const h1 = document.getElementsByTagName('h1')
 const levelNum = document.getElementById('level-num')
 const levelSkill = document.getElementById('level-skill')
-const msgField = document.getElementById('message-field')
+// const msgField = document.getElementById('message-field')
+const board = document.getElementById('board')
 const listenBtn = document.getElementById('listen-btn')
 const playBtn = document.getElementById('play-btn')
 const pauseBtn = document.getElementById('pause-btn')
@@ -57,11 +59,11 @@ function randomTune(difficulty) {
     console.log(waveform)
 }
 
-// Get the board
+// Get the boxes
 const box = document.querySelectorAll(".box")
 
 function resetBoard() {
-    listen()
+    if (levelCount > 1) listen()
     
     box.forEach((el) => { el.addEventListener('click', handleClick) })
 
@@ -103,9 +105,13 @@ function resetBoard() {
         }
 
         if (winTest(boolArray)) {
-            msgField.innerText = "YOU WON"
+            // msgField.innerText = "YOU WON"
             box.forEach((el) => { el.removeEventListener('click', handleClick) }) 
-            nextBtn.style.display = 'block'        
+            if (levelCount < 12) nextBtn.style.display = 'block'  
+            else {
+                h1.innerText = ''
+                levelNum.innerText = "YOU WON!!!"
+            }
         }
     }
 }
@@ -165,9 +171,12 @@ function listen() {
         }
     }
 
+    board.style.opacity = '0.5'
+
     // Disable gameplay until secret answer tune is finished
     setTimeout(function() {
         gameActive = true
+        board.style.opacity = '1'
         playBtn.addEventListener("click", playLoop)
     }, 2000)
 }
@@ -195,7 +204,7 @@ function newLevel() {
     levelCount += 1
     levelNum.innerText = levelCount.toString()
     nextBtn.style.display = 'none'
-    msgField.innerText = ''
+    // msgField.innerText = ''
 
     const skillLevel = Math.ceil(levelCount/3) - 1
     const skillList = ['EASY', 'MEDIUM', 'HARD', 'INSANE']

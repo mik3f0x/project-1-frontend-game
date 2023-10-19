@@ -3,7 +3,7 @@ body {
     color: yellow;
     font-family: "Orbitron", sans-serif;
     width: 960px;
-    margin: 2em auto;
+    margin: 1em auto;
 }
 
 header {
@@ -72,21 +72,22 @@ header {
 }
 
 #next-container {
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 #next-btn {
     display: block;
     margin: auto;
     height: 100px;
-    width: 160px;
+    width: 240px;
     background: url(images/next.png);
+    background-size: contain;
+    background-repeat:no-repeat;
+    background-position: center center;
     border: none;
-    background-size: cover;
     border-radius: 5%;
     background-color: #0cf;
     box-shadow:
         0 0 10px 6px #0cf,
         0 0 14px 9px #000;
-
 }
