@@ -1,10 +1,9 @@
 let gameActive = true
-levelCount = 11
+levelCount = 0
+let boxColor = 'magenta'
 
-const h1 = document.getElementsByTagName('h1')
 const levelNum = document.getElementById('level-num')
 const levelSkill = document.getElementById('level-skill')
-// const msgField = document.getElementById('message-field')
 const board = document.getElementById('board')
 const listenBtn = document.getElementById('listen-btn')
 const playBtn = document.getElementById('play-btn')
@@ -105,8 +104,11 @@ function resetBoard() {
         }
 
         if (winTest(boolArray)) {
-            // msgField.innerText = "YOU WON"
-            box.forEach((el) => { el.removeEventListener('click', handleClick) }) 
+            box.forEach((el) => {
+                el.removeEventListener('click', handleClick)
+                boxColor = 'blue' 
+                el.style.borderColor = boxColor
+            })
             if (levelCount < 12) nextBtn.style.display = 'block'  
             else {
                 h1.innerText = ''
@@ -146,7 +148,7 @@ function playLoop() {
 
         setTimeout(function() {
             for (let j = 0; j < 5; j++) {
-                box[j + index].style.borderColor = 'magenta'
+                box[j + index].style.borderColor = boxColor
                 setTimeout(function() {
                     box[j + index].style.borderColor = 'lime'
                 }, 25)                
@@ -194,8 +196,10 @@ playBtn.addEventListener("click", playLoop)
 nextBtn.addEventListener("click", newLevel)
 
 function newLevel() {
+    boxColor = 'magenta'
+
     box.forEach((el) => {
-        el.style.borderColor = 'magenta'
+        el.style.borderColor = boxColor
         el.style.backgroundColor = 'black' 
         el.style.boxShadow = 'none'
         el.dataset.checked = '0'
@@ -204,7 +208,6 @@ function newLevel() {
     levelCount += 1
     levelNum.innerText = levelCount.toString()
     nextBtn.style.display = 'none'
-    // msgField.innerText = ''
 
     const skillLevel = Math.ceil(levelCount/3) - 1
     const skillList = ['EASY', 'MEDIUM', 'HARD', 'INSANE']
