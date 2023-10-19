@@ -85,7 +85,7 @@ function resetBoard() {
 
         if (checkedBox === -1) {
             e.target.style.backgroundColor = 'red'
-            e.target.style.boxShadow = '6px 4px 2px 1px red'
+            e.target.style.boxShadow = '3px 2px 1px 1px red'
             e.target.dataset.checked = '1'
             boolArray[thisBox] = !boolArray[thisBox]
         } else if (checkedBox === thisBox) {
@@ -95,7 +95,7 @@ function resetBoard() {
             boolArray[thisBox] = !boolArray[thisBox]
         } else {
             e.target.style.backgroundColor = 'red'
-            e.target.style.boxShadow = '6px 4px 2px 1px red'
+            e.target.style.boxShadow = '3px 2px 1px 1px red'
             e.target.dataset.checked = '1'
             boolArray[thisBox] = !boolArray[thisBox]
             const currentBox = document.querySelector(`[data-box-number="${checkedBox}"]`)
