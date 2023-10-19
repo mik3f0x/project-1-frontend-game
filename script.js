@@ -4,6 +4,8 @@ let boxColor = 'magenta'
 
 const levelNum = document.getElementById('level-num')
 const levelSkill = document.getElementById('level-skill')
+const title = document.getElementById('title')
+const centerHead = document.getElementById('center-h1')
 const board = document.getElementById('board')
 const listenBtn = document.getElementById('listen-btn')
 const playBtn = document.getElementById('play-btn')
@@ -111,8 +113,10 @@ function resetBoard() {
             })
             if (levelCount < 12) nextBtn.style.display = 'block'  
             else {
-                h1.innerText = ''
-                levelNum.innerText = "YOU WON!!!"
+                title.innerText = ''
+                levelNum.innerText = ''
+                centerHead.innerText = "YOU WON!!!"
+                levelSkill.innerText = ''
             }
         }
     }
